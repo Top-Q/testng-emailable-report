@@ -41,8 +41,16 @@ public class AbstractTestCase {
 ```
 
 The HTML report file name is `emailable-testng-report.html` and it will be created in one of the following places depending on the method you used for running the tests. 
-In case you are running using Maven it will be created in the `target/surefire-reports` or 'target/failsafe-report'.
-If you are running your tests from your IDE, it will be created in 'test-output' folder.
+In case you are running using Maven it will be created in the `target/surefire-reports` or `target/failsafe-report`.
+If you are running your tests from your IDE, it will be created in `test-output` folder.
 
+
+## Extending the Report
+
+There wouldn't be much purpose in this report if it didn't allow you to easly change it in ways that are better suited for your organization. 
+The report is using the [Velocity](http://velocity.apache.org/) template engine for generating the reports. If you wish to change it, just copy the template to your `src/main/resources` folder, and change it as you see fit. 
+The original template file can be found in the project `src/main/resources` folder or in this direct [link](https://github.com/Top-Q/testng-emailable-report/blob/master/src/main/resources/report.vm) to the GitHub file.
+
+The object that is injected to the report is the actual TestNG class that implemnts the `ITestContext` interface. You can find the documentation of the interface in [TestNG API](http://static.javadoc.io/org.testng/testng/6.11/org/testng/ITestContext.html). It will probably be a good idea to take a look at the template first to see how different fields can be accessed.
 
 
