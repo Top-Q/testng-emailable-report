@@ -1,0 +1,125 @@
+#set ($s_color = "#43A047")
+#set ($sf_color = "#8ED670")
+#set ($f_color = "#E53935")
+#set ($w_color = "#FFEB3B")
+
+<h2>
+#if ($context.getFailedTests().size()> 0)
+	<font color=$f_color>
+	Suite "$context.getName()" has ended with $context.getFailedTests().size() failures
+	</font>
+#else
+	<font color=$s_color>
+	Suite "$context.getName()" has ended with no failures
+	</font>
+#end
+</h2>
+
+<h3>Test Status Summary</h3>
+<hr>
+<table border="0">
+	<tr>
+		<td style="padding-right:10px">Start Date</td>
+		<td>$context.getStartDate()</td>
+	</tr>
+	<tr>
+		<td style="padding-right:10px">Duration</td>
+		#set ($millis = $context.getEndDate().getTime() - $context.getStartDate().getTime())
+		#set ($seconds = $millis / 1000)
+		<td>$seconds seconds ($millis ms)</td>
+	</tr>
+
+	<tr>
+		<td style="padding-right:10px">Total Tests</td>
+		#set ($total = $context.getPassedTests().size() + $context.getFailedTests().size() + $context.getSkippedTests().size() + $context.getFailedButWithinSuccessPercentageTests().size())
+		<td>$total</td>
+	</tr>
+	<tr>
+		<td style="padding-right:10px">Passed Tests</td>
+		<td>$context.getPassedTests().size()</td>
+	</tr>
+	<tr>
+		<td style="padding-right:10px">Failed Tests</td>
+		<td>$context.getFailedTests().size()</td>
+	</tr>
+	#if ($context.getSkippedTests().size() > 0)
+	<tr>
+		<td style="padding-right:10px">Skipped Tests</td>
+		<td>$context.getSkippedTests().size()</td>
+	</tr>
+	#end
+	#if ($context.getFailedButWithinSuccessPercentageTests().size() > 0)
+		<tr>
+			<td style="padding-right:10px">Failed But Within Succuess Percentage Tests</td>
+			<td>$context.getFailedButWithinSuccessPercentageTests().size()</td>
+		</tr>
+
+	#end
+</table>
+<br>
+<br>
+#if ($context.getFailedTests().size() > 0)
+	<h3>Failed Tests</h3>
+	<hr>
+	<table border="0" style="width:100%">
+	<tr align="left">		
+		<th>Test Name</th>
+		<th>Status</th>
+		<th>Failure Reason</th>			
+	</tr>
+	#foreach ($result in $context.getFailedTests().getAllResults())
+		<tr>
+			<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
+			<td bgcolor=$f_color><font color="white">FAILURE</font></td>			
+			<td style="padding-left:10px" >$result.getThrowable()</td>
+		</tr>
+	#end
+	</table>
+	<br><small><i>(Hover the method name to see the test class name)</i></small>
+#end
+#if ($context.getSkippedTests().size() > 0)
+	<h3>Skipped Tests</h3>
+	<hr>
+	<table border="0">
+		<tr align="left">
+			<th>Test Name</th>
+			<th>Status</th>
+		<tr>
+	#foreach ($result in $context.getSkippedTests().getAllResults())
+		<tr>
+			<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
+			<td bgcolor=$w_color><font color="white">SKIPPED</font></td>			
+		</tr>
+	#end
+	</table>
+	<br><small><i>(Hover the method name to see the test class name)</i></small>
+#end
+#if ($context.getPassedTests().size() > 0)
+	<h3>Passed Tests</h3>
+	<hr>
+	<table border="0">
+		<tr align="left">
+			<th>Test Name</th>
+			<th>Status</th>
+		<tr>
+	#foreach ($result in $context.getPassedTests().getAllResults())
+		<tr>
+			<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
+			<td bgcolor=$s_color><font color="white">PASSED</font></td>			
+		</tr>
+	#end
+	#foreach ($result in $context.getFailedButWithinSuccessPercentageTests().getAllResults())
+		<tr>
+			<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
+			<td bgcolor=$sf_color><font color="white">SUCCESS_PERCENTAGE_FAILURE</font></td>			
+		</tr>
+	#end
+	</table>
+	<br><small><i>(Hover the method name to see the test class name)</i></small>
+#end
+</h2>
+<br>
+
+
+
+
