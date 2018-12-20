@@ -1,6 +1,10 @@
 # testng-emailable-report
 The purpose of the project is to create a template based emailable HTML report for the TestNG framework. 
 
+After runing the tests, an HTML report will be generated. The report is fully ready to be embedded in the body of the email.
+
+![example report](https://raw.githubusercontent.com/wiki/Top-Q/testng-emailable-report/report.png)
+
 ## Adding the project
 
 Make sure you have the reposoitory included in your POM file
