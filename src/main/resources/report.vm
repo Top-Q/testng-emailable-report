@@ -68,7 +68,7 @@
 	</tr>
 	#foreach ($result in $context.getFailedTests().getAllResults())
 		<tr>
-			<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
+			<td style="padding-right:10px;word-break: break-all" title="$result.getMethod().getQualifiedName()">$result.getName()</td>
 			<td bgcolor=$f_color><font color="white">FAILURE</font></td>			
 			<td style="padding-left:10px;word-break: break-all" >$result.getThrowable()</td>
 		</tr>
