@@ -2,7 +2,6 @@
 #set ($sf_color = "#8ED670")
 #set ($f_color = "#E53935")
 #set ($w_color = "#FFEB3B")
-
 <h2>
 #if ($context.getFailedTests().size()> 0)
 	<font color=$f_color>
