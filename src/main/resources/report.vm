@@ -70,7 +70,7 @@
 		<tr>
 			<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
 			<td bgcolor=$f_color><font color="white">FAILURE</font></td>			
-			<td style="padding-left:10px" >$result.getThrowable()</td>
+			<td style="padding-left:10px;word-break: break-all" >$result.getThrowable()</td>
 		</tr>
 	#end
 	</table>

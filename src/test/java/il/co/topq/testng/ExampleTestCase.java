@@ -25,5 +25,14 @@ public class ExampleTestCase extends AbstractTestCase {
 		Thread.sleep(1000);
 	}
 	
+	@Test
+	public void longFailureSentenceMessageTest() {
+		Assert.assertNotNull(null, "Long long long long long long long long Long long long long long long long long Long long long long long long long long Long long long long long long long long Long long long long long long long long Long long long long long long long long");
+	}
+	
+	@Test
+	public void longFailureWordMessageTest() {
+		Assert.assertNotNull(null, "ExceptionForSomehingThatWeLikeInJavaLikeAbstractFactoryBuilderConcreteImplInterfaceListenerSingeltonPatternObjectImplSomethingAndAnotherThingAndSomeMore");
+	}
 
 }
