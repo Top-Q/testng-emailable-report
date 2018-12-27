@@ -38,7 +38,7 @@ public class EmailableReportListener implements ITestListener {
 			StringWriter sw = new StringWriter();
 			t.merge(vc, sw);
 			File file = new File(new File(testngContext.getOutputDirectory()).getParent(), REPORT_NAME);
-			FileUtils.write(file, sw.toString(), "utf-16");
+			FileUtils.write(file, sw.toString(), "utf-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
