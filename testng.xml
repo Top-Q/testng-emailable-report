@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Emailable Report Example" verbose="1">
+	<test name="First Test">
+		<packages>
+			<package name="il.co.topq.testng"></package>
+		</packages>
+	</test>
+	<test name="Second Test">
+		<packages>
+			<package name="il.co.topq.testng"></package>
+		</packages>
+	</test>
+
+</suite>

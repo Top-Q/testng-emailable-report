@@ -1,10 +1,8 @@
 package il.co.topq.testng;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.velocity.Template;
@@ -12,20 +10,19 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
-import org.testng.ITestContext;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
+import org.testng.ISuite;
+import org.testng.ISuiteListener;
 
-public class EmailableReportListener implements ITestListener {
+public class EmailableReportListener implements ISuiteListener {
 
 	private static final String TEMPLATE_NAME = "report.vm";
 	private static final String REPORT_NAME = "emailable-testng-report.html";
 
 	@Override
-	public void onFinish(ITestContext testngContext) {
+	public void onFinish(ISuite suite) {
 		try {
 			RuntimeServices rs = RuntimeSingleton.getRuntimeServices();
-			StringReader sr = new StringReader(resourceToString(TEMPLATE_NAME));
+			StringReader sr = new StringReader(ResourceUtils.resourceToString(TEMPLATE_NAME));
 			SimpleNode sn = rs.parse(sr, TEMPLATE_NAME);
 			Template t = new Template();
 			t.setRuntimeServices(rs);
@@ -33,51 +30,25 @@ public class EmailableReportListener implements ITestListener {
 			t.initDocument();
 
 			VelocityContext vc = new VelocityContext();
-			vc.put("context", testngContext);
+			vc.put("suite", suite);
+			vc.put("summary", SuiteSummary.build(suite));
 
 			StringWriter sw = new StringWriter();
 			t.merge(vc, sw);
-			File file = new File(new File(testngContext.getOutputDirectory()).getParent(), REPORT_NAME);
+			File file = new File(new File(suite.getOutputDirectory()).getParent(), REPORT_NAME);
 			FileUtils.write(file, sw.toString(), "utf-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		suite.getResults().values().stream().forEach(s-> s.getTestContext().getPassedTests());
 	}
-
-	private String resourceToString(final String resourceName) throws IOException {
-		try (Scanner s = new Scanner(getClass().getClassLoader().getResourceAsStream(resourceName))) {
-			s.useDelimiter("\\A");
-			return s.hasNext() ? s.next() : "";
-		}
-	}
+	
 
 	//************* Unused **************
-	
-	@Override
-	public void onTestStart(ITestResult result) {
-	}
 
 	@Override
-	public void onTestSuccess(ITestResult result) {
+	public void onStart(ISuite suite) {
 	}
-
-	@Override
-	public void onTestFailure(ITestResult result) {
-	}
-
-	@Override
-	public void onTestSkipped(ITestResult result) {
-	}
-
-	@Override
-	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-	}
-
-	@Override
-	public void onStart(ITestContext context) {
-	}
-	
 	//***********************************
 
 }
