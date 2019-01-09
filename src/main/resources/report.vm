@@ -2,144 +2,159 @@
 #set ($sf_color = "#8ED670")
 #set ($f_color = "#E53935")
 #set ($w_color = "#FFEB3B")
-<h2>
-#if ($summary.getFailedTests().size()> 0)
-	<font color=$f_color>
-	Suite "$summary.getName()" has ended with $summary.getFailedTests().size() failures
-	</font>
-#else
-	<font color=$s_color>
-	Suite "$summary.getName()" has ended with no failures
-	</font>
+
+#if ($sections.get(0))
+	<h2>
+	#if ($summary.getFailedTests().size()> 0)
+		<font color=$f_color>
+		Suite "$summary.getName()" has ended with $summary.getFailedTests().size() failures
+		</font>
+	#else
+		<font color=$s_color>
+		Suite "$summary.getName()" has ended with no failures
+		</font>
+	#end
+	</h2>
 #end
-</h2>
 
-<h3>Test Status Summary</h3>
-<hr>
-<table border="0">
-	<tr>
-		<td style="padding-right:10px">Start Date</td>
-		<td>$summary.getStartDate()</td>
-	</tr>
-	<tr>
-		<td style="padding-right:10px">Duration</td>
-		#set ($millis = $summary.getEndDate().getTime() - $summary.getStartDate().getTime())
-		#set ($seconds = $millis / 1000)
-		<td>$seconds seconds ($millis ms)</td>
-	</tr>
+#if ($sections.get(1))
+	<h3>Test Status Summary</h3>
+	<hr>
+	<table border="0">
+		<tr>
+			<td style="padding-right:10px">Start Date</td>
+			<td>$summary.getStartDate()</td>
+		</tr>
+		<tr>
+			<td style="padding-right:10px">Duration</td>
+			#set ($millis = $summary.getEndDate().getTime() - $summary.getStartDate().getTime())
+			#set ($seconds = $millis / 1000)
+			<td>$seconds seconds ($millis ms)</td>
+		</tr>
+	
+		<tr>
+			<td style="padding-right:10px">Total Tests</td>
+			#set ($total = $summary.getPassedTests().size() + $summary.getFailedTests().size() + $summary.getSkippedTests().size() + $summary.getFailedButWithinSuccessPercentageTests().size())
+			<td>$total</td>
+		</tr>
+		<tr>
+			<td style="padding-right:10px">Passed Tests</td>
+			<td>$summary.getPassedTests().size()</td>
+		</tr>
+		<tr>
+			<td style="padding-right:10px">Failed Tests</td>
+			<td>$summary.getFailedTests().size()</td>
+		</tr>
+		#if ($summary.getSkippedTests().size() > 0)
+		<tr>
+			<td style="padding-right:10px">Skipped Tests</td>
+			<td>$summary.getSkippedTests().size()</td>
+		</tr>
+		#end
+		#if ($summary.getFailedButWithinSuccessPercentageTests().size() > 0)
+			<tr>
+				<td style="padding-right:10px">Failed But Within Succuess Percentage Tests</td>
+				<td>$summary.getFailedButWithinSuccessPercentageTests().size()</td>
+			</tr>
+	
+		#end
+	</table>
+	<br>
+#end
 
-	<tr>
-		<td style="padding-right:10px">Total Tests</td>
-		#set ($total = $summary.getPassedTests().size() + $summary.getFailedTests().size() + $summary.getSkippedTests().size() + $summary.getFailedButWithinSuccessPercentageTests().size())
-		<td>$total</td>
-	</tr>
-	<tr>
-		<td style="padding-right:10px">Passed Tests</td>
-		<td>$summary.getPassedTests().size()</td>
-	</tr>
-	<tr>
-		<td style="padding-right:10px">Failed Tests</td>
-		<td>$summary.getFailedTests().size()</td>
-	</tr>
+#if ($sections.get(2))
+	<br>
+	<h3>Test Method Status Per Test</h3>
+	<hr>
+	<table border="0" style="width:40%">
+		<tr>
+			<th>Suite Name</th>
+			<th>Passed</th>
+			<th>Failed</th>
+			<th>Skipped</th>
+		</tr>
+	#foreach ($suiteResult in $suite.getResults().values())
+		#set ($testContext = $suiteResult.getTestContext())
+		<tr>
+			<td>$testContext.getName()</td>
+			#set ($successTests = $testContext.getPassedTests().size() + $testContext.getFailedButWithinSuccessPercentageTests().size()) 
+			<td bgcolor="$s_color"><font color="white">$successTests</font></td>
+			<td bgcolor="$f_color"><font color="white">$testContext.getFailedTests().size()</font></td>
+			<td bgcolor="$w_color"><font color="white">$testContext.getSkippedTests().size()</font></td>
+		</tr>
+	#end
+	</table>
+	<br>
+#end
+#if ($sections.get(3))
+	<br>
+	#if ($summary.getFailedTests().size() > 0)
+		<h3>Failed Tests</h3>
+		<hr>
+		<table border="0" style="width:100%">
+		<tr align="left">		
+			<th>Test Name</th>
+			<th>Status</th>
+			<th>Failure Reason</th>			
+		</tr>
+		#foreach ($result in $summary.getFailedTests().getAllResults())
+			<tr>
+				<td style="padding-right:10px;word-break: break-all" title="$result.getMethod().getQualifiedName()">$result.getName()</td>
+				<td bgcolor=$f_color><font color="white">FAILURE</font></td>			
+				<td style="padding-left:10px;word-break: break-all" >$result.getThrowable()</td>
+			</tr>
+		#end
+		</table>
+		<br><small><i>(Hover the method name to see the test class name)</i></small>
+	#end
+#end
+#if ($sections.get(4))
 	#if ($summary.getSkippedTests().size() > 0)
-	<tr>
-		<td style="padding-right:10px">Skipped Tests</td>
-		<td>$summary.getSkippedTests().size()</td>
-	</tr>
+		<h3>Skipped Tests</h3>
+		<hr>
+		<table border="0">
+			<tr align="left">
+				<th>Test Name</th>
+				<th>Status</th>
+			<tr>
+		#foreach ($result in $summary.getSkippedTests().getAllResults())
+			<tr>
+				<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
+				<td bgcolor=$w_color><font color="white">SKIPPED</font></td>			
+			</tr>
+		#end
+		</table>
+		<br><small><i>(Hover the method name to see the test class name)</i></small>
 	#end
-	#if ($summary.getFailedButWithinSuccessPercentageTests().size() > 0)
-		<tr>
-			<td style="padding-right:10px">Failed But Within Succuess Percentage Tests</td>
-			<td>$summary.getFailedButWithinSuccessPercentageTests().size()</td>
-		</tr>
+#end
 
+#if ($sections.get(5))
+	#if ($summary.getPassedTests().size() > 0)
+		<h3>Passed Tests</h3>
+		<hr>
+		<table border="0">
+			<tr align="left">
+				<th>Test Name</th>
+				<th>Status</th>
+			<tr>
+		#foreach ($result in $summary.getPassedTests().getAllResults())
+			<tr>
+				<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
+				<td bgcolor=$s_color><font color="white">PASSED</font></td>			
+			</tr>
+		#end
+		#foreach ($result in $summary.getFailedButWithinSuccessPercentageTests().getAllResults())
+			<tr>
+				<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
+				<td bgcolor=$sf_color><font color="white">SUCCESS_PERCENTAGE_FAILURE</font></td>			
+			</tr>
+		#end
+		</table>
+		<br><small><i>(Hover the method name to see the test class name)</i></small>
 	#end
-</table>
-<br>
-<br>
-<h3>Test Method Status Per Test</h3>
-<hr>
-<table border="0" style="width:40%">
-	<tr>
-		<th>Suite Name</th>
-		<th>Passed</th>
-		<th>Failed</th>
-		<th>Skipped</th>
-	</tr>
-#foreach ($suiteResult in $suite.getResults().values())
-	#set ($testContext = $suiteResult.getTestContext())
-	<tr>
-		<td>$testContext.getName()</td>
-		#set ($successTests = $testContext.getPassedTests().size() + $testContext.getFailedButWithinSuccessPercentageTests().size()) 
-		<td bgcolor="$s_color"><font color="white">$successTests</font></td>
-		<td bgcolor="$f_color"><font color="white">$testContext.getFailedTests().size()</font></td>
-		<td bgcolor="$w_color"><font color="white">$testContext.getSkippedTests().size()</font></td>
-	</tr>
+	</h2>
+	<br>
 #end
-</table>
-<br>
-<br>
-#if ($summary.getFailedTests().size() > 0)
-	<h3>Failed Tests</h3>
-	<hr>
-	<table border="0" style="width:100%">
-	<tr align="left">		
-		<th>Test Name</th>
-		<th>Status</th>
-		<th>Failure Reason</th>			
-	</tr>
-	#foreach ($result in $summary.getFailedTests().getAllResults())
-		<tr>
-			<td style="padding-right:10px;word-break: break-all" title="$result.getMethod().getQualifiedName()">$result.getName()</td>
-			<td bgcolor=$f_color><font color="white">FAILURE</font></td>			
-			<td style="padding-left:10px;word-break: break-all" >$result.getThrowable()</td>
-		</tr>
-	#end
-	</table>
-	<br><small><i>(Hover the method name to see the test class name)</i></small>
-#end
-#if ($summary.getSkippedTests().size() > 0)
-	<h3>Skipped Tests</h3>
-	<hr>
-	<table border="0">
-		<tr align="left">
-			<th>Test Name</th>
-			<th>Status</th>
-		<tr>
-	#foreach ($result in $summary.getSkippedTests().getAllResults())
-		<tr>
-			<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
-			<td bgcolor=$w_color><font color="white">SKIPPED</font></td>			
-		</tr>
-	#end
-	</table>
-	<br><small><i>(Hover the method name to see the test class name)</i></small>
-#end
-#if ($summary.getPassedTests().size() > 0)
-	<h3>Passed Tests</h3>
-	<hr>
-	<table border="0">
-		<tr align="left">
-			<th>Test Name</th>
-			<th>Status</th>
-		<tr>
-	#foreach ($result in $summary.getPassedTests().getAllResults())
-		<tr>
-			<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
-			<td bgcolor=$s_color><font color="white">PASSED</font></td>			
-		</tr>
-	#end
-	#foreach ($result in $summary.getFailedButWithinSuccessPercentageTests().getAllResults())
-		<tr>
-			<td title="$result.getMethod().getQualifiedName()" style="padding-right:10px">$result.getName()</td>
-			<td bgcolor=$sf_color><font color="white">SUCCESS_PERCENTAGE_FAILURE</font></td>			
-		</tr>
-	#end
-	</table>
-	<br><small><i>(Hover the method name to see the test class name)</i></small>
-#end
-</h2>
-<br>
 
 
 

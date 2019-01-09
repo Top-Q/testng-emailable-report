@@ -1,5 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Emailable Report Example" verbose="1">
+	<parameter name="emailReportEnabledSections" value=""></parameter>
 	<test name="First Test">
 		<packages>
 			<package name="il.co.topq.testng"></package>
