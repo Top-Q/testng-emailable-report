@@ -57,6 +57,28 @@
 </table>
 <br>
 <br>
+<h3>Test Method Status Per Test</h3>
+<hr>
+<table border="0" style="width:40%">
+	<tr>
+		<th>Suite Name</th>
+		<th>Passed</th>
+		<th>Failed</th>
+		<th>Skipped</th>
+	</tr>
+#foreach ($suiteResult in $suite.getResults().values())
+	#set ($testContext = $suiteResult.getTestContext())
+	<tr>
+		<td>$testContext.getName()</td>
+		#set ($successTests = $testContext.getPassedTests().size() + $testContext.getFailedButWithinSuccessPercentageTests().size()) 
+		<td bgcolor="$s_color"><font color="white">$successTests</font></td>
+		<td bgcolor="$f_color"><font color="white">$testContext.getFailedTests().size()</font></td>
+		<td bgcolor="$w_color"><font color="white">$testContext.getSkippedTests().size()</font></td>
+	</tr>
+#end
+</table>
+<br>
+<br>
 #if ($summary.getFailedTests().size() > 0)
 	<h3>Failed Tests</h3>
 	<hr>

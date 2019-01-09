@@ -40,7 +40,6 @@ public class EmailableReportListener implements ISuiteListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		suite.getResults().values().stream().forEach(s-> s.getTestContext().getPassedTests());
 	}
 	
 
