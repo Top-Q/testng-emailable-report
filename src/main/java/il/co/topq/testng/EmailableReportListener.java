@@ -11,6 +11,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
+import org.apache.velocity.tools.generic.NumberTool;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 
@@ -38,6 +39,8 @@ public class EmailableReportListener implements ISuiteListener {
 			vc.put("suite", suite);
 			vc.put("summary", SuiteSummary.build(suite));
 			vc.put("sections", enabledSections(suite.getParameter(ENABLED_SECTIONS_PARAM)));
+			// Used for formatting decimal places
+			vc.put("numberTool", new NumberTool());
 
 			StringWriter sw = new StringWriter();
 			t.merge(vc, sw);

@@ -28,8 +28,8 @@
 		<tr>
 			<td style="padding-right:10px">Duration</td>
 			#set ($millis = $summary.getEndDate().getTime() - $summary.getStartDate().getTime())
-			#set ($seconds = $millis / 1000)
-			<td>$seconds seconds ($millis ms)</td>
+			#set ($minutes = $millis / 1000.0 / 60.0)
+			<td>$numberTool.format("#0.00", $minutes) minutes ($millis ms)</td>
 		</tr>
 	
 		<tr>
