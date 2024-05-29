@@ -45,7 +45,7 @@ public class SuiteSummary {
 					.getPassedTests()
 					.getAllResults()
 					.stream()
-					.forEach(t -> summary.passedTests.addResult(t, t.getMethod())));
+					.forEach(t -> summary.passedTests.addResult(t)));
 		suite
 			.getResults()
 			.values()
@@ -53,7 +53,7 @@ public class SuiteSummary {
 					.getSkippedTests()
 					.getAllResults()
 					.stream()
-					.forEach(t -> summary.skippedTests.addResult(t, t.getMethod())));
+					.forEach(t -> summary.skippedTests.addResult(t)));
 		suite
 			.getResults()
 			.values()
@@ -61,7 +61,7 @@ public class SuiteSummary {
 					.getFailedTests()
 					.getAllResults()
 					.stream()
-					.forEach(t -> summary.failedTests.addResult(t, t.getMethod())));
+					.forEach(t -> summary.failedTests.addResult(t)));
 		suite
 			.getResults()
 			.values()
@@ -69,7 +69,7 @@ public class SuiteSummary {
 					.getFailedButWithinSuccessPercentageTests()
 					.getAllResults()
 					.stream()
-					.forEach(t -> summary.failedButWithinSuccessPercentageTests.addResult(t, t.getMethod())));		
+					.forEach(t -> summary.failedButWithinSuccessPercentageTests.addResult(t)));		
 		suite
 			.getResults()
 			.values()
@@ -77,7 +77,7 @@ public class SuiteSummary {
 					.getFailedButWithinSuccessPercentageTests()
 					.getAllResults()
 					.stream()
-					.forEach(t -> summary.failedButWithinSuccessPercentageTests.addResult(t, t.getMethod())));		
+					.forEach(t -> summary.failedButWithinSuccessPercentageTests.addResult(t)));		
 
 		// @formatter:on
 		summary.startDate = suite.getResults().values().stream().map(s -> s.getTestContext().getStartDate())
